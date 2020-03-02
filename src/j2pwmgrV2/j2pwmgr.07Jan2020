@@ -1,0 +1,114 @@
+
+/*
+ * 01Dec2019, Maiko Langelaar (VE4KLM), Copyright 2019
+ *
+ * please refer to test.c for original notes and prototype code
+ *
+ * Versions of JNOS 2.0m.1 (not 2.0m itself) will no longer have
+ * any JNOS user passwords stored in the ftpusers file. As well,
+ * the winlink password will no longer be mangled and encrypted,
+ * mostly because encryption is reversible, and just not the way
+ * to do things anymore - the deprecation of libcrypt helped me
+ * nicely on this one anyways ... So now presenting to you :
+ *
+ * Version 2 of the JNOS 2.0 Password Management Database
+ *
+ * Encryption has been replaced with HASH / SALT pairs !
+ *
+ * The passwords previously kept in ftpusers will now have their
+ * hash / salt pairs saved in the same database as is currently
+ * used for the winlink CMS login credentials, no passwords for
+ * those as well, they too will use a hash / salt pair.
+ *
+ * No more cleartext, no more ability to retrieve passwords !
+ *
+ */
+
+#include <stdio.h>
+#include <string.h>
+
+static int usage ()
+{
+	printf ("\n JNOS 2.0 password manager V2 - Dec 2019, by Maiko Langelaar (VE4KLM)\n"); 
+	printf ("\n  Usage: j2pwmgr -a <user> [option]\n\n   -a  create user\n   -d  delete user\n\n  Option:\n\n   -w  mark it as a Winlink user, the default is a JNOS user.\n\n");
+
+	return 0;
+}
+
+int main (int argc, char **argv)
+{
+	char passwd[20], *cmd, *usr, *opt;
+
+ 	opt = (char*)0;
+
+	if (argc < 3)
+		return (usage ());
+
+	argv++; cmd = strdup (*argv);
+
+	if (*cmd != '-')
+		return (usage ());
+
+	argv++; usr = strdup (*argv);
+
+	if (argc == 4)
+	{
+		argv++; opt = strdup (*argv);
+
+		if (*opt != '-')
+			return (usage ());
+	}
+
+	cmd++; if (opt) opt++;
+
+	if (*cmd == 'a')
+	{
+		printf ("enter your password\n");
+
+		/*
+		 * 24Jun2016, Maiko, deprecated, supposedly dangerous function,
+		 * so yeah okay whatever, replace with something that requires
+		 * more code, typical C scare mongers ...
+		 *
+			gets (cleartxtpasswd);
+		 */
+
+		fgets (passwd, sizeof(passwd)-2, stdin);
+
+		j2rip (passwd);
+
+		/*
+		 * 03Dec2019, Maiko (VE4KLM), This is a bit of a let down, but that's
+		 * life, use V2 for my type 0 JNOS users, and stick with the original
+		 * version for the type 1 Winlink CMS user (for now) - the logistics
+		 * involved in moving from passwords to hashes ? overwhelming, yup !
+		 *
+		j2adduser ((opt && (*opt == 'w')) ? 1 : 0, usr, passwd);
+		 *
+		 * 05Jan2020, Maiko, Added directory and privs to j2adduser function,
+	 	 * setting to NULL for now, which will result in the default values
+		 * being applied to the current user. Will add extra options later.
+		 */
+
+		if (opt && (*opt == 'w'))
+			j2adduserV1 (1, usr, passwd);
+		else
+			j2adduser (0, usr, passwd, NULL, NULL);
+	}
+        else if (*cmd == 'l' && (opt && (*opt == 'w')))
+	{
+		/* 06Dec2019, Maiko (VE4KLM), Yup, we need to be able to
+		 * retrieve clear text password since challenge response
+		 * processing requires it (for now anyways).
+		 */
+                printf ("passwd %s\n", j2userpasswdV1 (1, usr));
+	}
+
+	else if (*cmd == 'd')
+	{
+		j2deluser ((opt && (*opt == 'w')) ? 1: 0, usr);
+	}
+
+	return 0;
+}
+
