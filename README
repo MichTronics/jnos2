@@ -1,0 +1,20 @@
+
+ Some people have asked me to put the JNOS 2.0 sources on github, so here you go.
+
+ The official JNOS 2.0 site will always be :
+
+   https://www.langelaar.net/jnos2
+
+ Copyright (C) 2004-2020 by Maiko Langelaar, VE4KLM
+
+March 1, 2020
+-------------
+
+The src directory is the latest 2.0m release with the 2.0n.beta update already
+added to it. So when you are reading the docs/changes.txt, just skip over the
+part that says this update is only available as a patch, blah, blah, and jump
+directly to the part that says to edit your config.h (or config.h.default),
+and make sure this entry exists :
+
+   #define GET_PASSWORD_FROM_J2PWMGR
+
