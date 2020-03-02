@@ -1,0 +1,11 @@
+
+https://unix.stackexchange.com/questions/230673/how-to-generate-a-random-string
+
+openssl rand -hex 16
+
+https://unix.stackexchange.com/questions/97582/how-to-find-and-replace-string-without-use-command-sed
+
+perl -pe "s/foo/foofoofoo/g" data.txt
+
+
+
