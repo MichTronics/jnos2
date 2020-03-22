@@ -32,7 +32,7 @@
 #include <sys/time.h>
 #include <errno.h>
 
-unsigned char *MD5ByteHash (unsigned char *iBuf);
+unsigned char *SHA512ByteHash (unsigned char *iBuf);
 
 static unsigned char *random_salt (int len)
 {
@@ -77,7 +77,7 @@ extern char *j2strlwr (char*);
  */
 void j2adduser (int type, char *username, char *password, char *dirpath, char *privs, char *gecos)
 {
-	unsigned char *salt, *hash, final[16], *fptr = final;
+	unsigned char *salt, *hash, final[64], *fptr = final;
 	char userpath[100];
 	int cnt, req;
 	FILE *fp;
@@ -122,11 +122,13 @@ void j2adduser (int type, char *username, char *password, char *dirpath, char *p
 	memcpy (fptr, salt, 4);
 	fptr += 4;
 
-	/* password will take up the final 12 bytes */
-	memcpy (fptr, password, 12);
+	/* using strcpy which terminates what needs to be a string */
+	strcpy (fptr, password);
 
-	/* now create a proper 16 byte MD5 hash of the combo above */
-	hash = MD5ByteHash (final);
+	// printf ("password [%s]\n", password);
+
+	/* now create a proper 64 byte SHA512 hash of the combo above */
+	hash = SHA512ByteHash (final);
 
 	if ((fp = fopen (userpath, "w+")))
 	{
@@ -134,7 +136,7 @@ void j2adduser (int type, char *username, char *password, char *dirpath, char *p
 
 	/* let's stick with ascii representation for portability */
 
-		for (cnt = 0; cnt < 16; cnt++, hash++)
+		for (cnt = 0; cnt < 64; cnt++, hash++)
 			fprintf (fp, "%02x", *hash);
 
 		fprintf (fp, ":");

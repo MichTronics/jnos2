@@ -1,13 +1,15 @@
 
 #include "string.h"
 
-#include <openssl/md5.h>
+#include <openssl/sha.h>
 
-unsigned char *MD5ByteHash (unsigned char *iBuf)
+unsigned char *SHA512ByteHash (unsigned char *iBuf)
 {
-	static unsigned char hash[MD5_DIGEST_LENGTH];
+	static unsigned char hash[SHA512_DIGEST_LENGTH];
 
-	MD5 (iBuf, strlen ((char*)iBuf), hash);
+	// printf ("iBuf [%s] [%d]\n", iBuf, strlen((char*)iBuf));
+
+	SHA512 (iBuf, strlen ((char*)iBuf), hash);
 
 	return hash;
 }

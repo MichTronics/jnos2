@@ -42,7 +42,7 @@ char *get_a_str_nxt_terminator (char *src, char *dst, char terminator)
 	return src;
 }
 
-unsigned char *MD5ByteHash (unsigned char *iBuf);
+unsigned char *SHA512ByteHash (unsigned char *iBuf);
 
 /* 15Jan2020, Maiko, MUST prototype this guys, ubuntu is unforgiving */
 extern char *j2strlwr (char*);
@@ -54,8 +54,8 @@ extern char *j2strdup (const char*);
 
 int j2chkuser (int type, char *username, char *password, char **dirpath, char **privs)
 {
-	unsigned char *hash, final[16], *fptr = final;
-	char general[100], r_username[20], r_hash[16];
+	unsigned char *hash, final[64], *fptr = final;
+	char general[250], r_username[20], r_hash[64];
 	char *rp_hash, r_salt[4], *rp_salt, *ptr;
 	FILE *fp;
 	int cnt;
@@ -88,7 +88,7 @@ int j2chkuser (int type, char *username, char *password, char **dirpath, char **
 
 		ptr++;	/* skip delimiter */
 
-		for (cnt = 0, rp_hash = r_hash; cnt < 16; cnt++, rp_hash++, ptr++, ptr++)
+		for (cnt = 0, rp_hash = r_hash; cnt < 64; cnt++, rp_hash++, ptr++, ptr++)
 			*rp_hash = j2hextochar (ptr);
 
 		ptr++;	// skip ':' delimiter
@@ -134,14 +134,18 @@ int j2chkuser (int type, char *username, char *password, char **dirpath, char **
 	memcpy (fptr, r_salt, 4);
 	fptr += 4;
 
-	/* password will take up the final 12 bytes */
-	memcpy (fptr, password, 12);
+	// printf ("r_salt [%.4s]\n", r_salt);
 
-	/* now create a proper 16 byte MD5 hash of the combo above */
-	hash = MD5ByteHash (final);
+	/* using strcpy which terminates what needs to be a string */
+	strcpy (fptr, password);
+
+	// printf ("password [%s]\n", password);
+
+	/* now create a proper 64 byte SHA512 hash of the combo above */
+	hash = SHA512ByteHash (final);
 
 	/* does the hash generated match the one read in from the file ? */
-	return (memcmp (hash, r_hash, 16) == 0);
+	return (memcmp (hash, r_hash, 64) == 0);
 }
 
 #include <sys/types.h>

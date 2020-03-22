@@ -149,9 +149,9 @@ int main (int argc, char **argv)
 			 *
 				gets (cleartxtpasswd);
 			 */
-			passwd = malloc (20);
+			passwd = malloc (65);
 
-			fgets (passwd, 18, stdin);
+			fgets (passwd, 60, stdin);
 		}
 
 		j2rip (passwd);
