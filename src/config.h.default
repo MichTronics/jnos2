@@ -133,7 +133,7 @@
  */
 #define B2F		/* Support for B2F forwarding */
 
-#define	INP2011		/* New INP (read only for now) support (Sep2011) */
+#undef	INP2011		/* New INP (read only for now) support (Sep2011) */
 
 #define JNOSPTY98	/* Better support for /dev/ptmx, /dev/pts/N (Dec2011) */
 
@@ -178,6 +178,10 @@
 #define SNMPD	/* NEW (17Dec2010) - SNMPD (for my mrtg for starters) */
 
 #define J2_SNMPD_VARS	/* 31Jan2011 - Permanent do NOT undefine */
+
+/* NEW 24-03-2020 2.0n.beta */
+
+#define GET_PASSWORD_FROM_J2PWMGR /* Use password manager J2PWMGR */
 
 /*
  * Section 2 - The original JNOS 1.11f configuration options.
