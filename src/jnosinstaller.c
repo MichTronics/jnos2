@@ -32,13 +32,13 @@ static int dothisone (char *str)
 {
 	char entry[5];
 
-	printf ("%s (y or n) ?\n", str);
+	printf ("%s (yes or no) ?\n", str);
 
 	while (1)
 	{
 		// gets (entry);
-		fgets (entry, sizeof(entry)-2, stdin);
-		printf ("entry : %d\n", *entry);
+		fgets (entry, sizeof(entry)-3, stdin);
+		entry[strcspn(entry, "\n")] = 0;
 		if (*entry == 'y' || *entry == 'n')
 			break;
 
@@ -76,9 +76,10 @@ static int prompt_4_group (FILE *fpo, char *ddptr)
 
 	/* get the group number */
 	sprintf (entry, "%c", *ddptr++);
+
 	currgroupnum = atoi (entry);
 
-//	printf ("group # %d\n", currgroupnum);
+	//printf ("group # %d\n", currgroupnum);
 
 	if (currgroupnum == 1)
 	{
