@@ -32,13 +32,13 @@ static int dothisone (char *str)
 {
 	char entry[5];
 
-	printf ("%s (yes or no) ?\n", str);
+	printf ("%s (y or n) ?\n", str);
 
 	while (1)
 	{
 		// gets (entry);
 		fgets (entry, sizeof(entry)-2, stdin);
-
+		printf ("entry : %d\n", *entry);
 		if (*entry == 'y' || *entry == 'n')
 			break;
 
@@ -258,7 +258,7 @@ int main (int argc, char **argv)
 	prompt ();
 	// gets (buffer_ca);
 	fgets (buffer_ca, sizeof(buffer_ca)-2, stdin);
-	if (strcmp ("install", buffer_ca))
+	if (strcmp ("install\n", buffer_ca))
 		exit (0);
 
 	printf ("\nEnter the JNOS root directory (default is /jnos)\n");
@@ -289,7 +289,7 @@ int main (int argc, char **argv)
 	 */
 	printf ("extracting required directories and files ...\n");
 
-	sprintf (buffer_ca, "tar --directory=%s -xvf files.tar\n", jnosroot);
+	sprintf (buffer_ca, "tar -xvf files.tar --directory=%s\n", jnosroot);
 
 	if (ji_system (buffer_ca) == -1)
 		exit (0);
