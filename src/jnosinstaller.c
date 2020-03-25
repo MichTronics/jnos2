@@ -37,7 +37,7 @@ static int dothisone (char *str)
 	while (1)
 	{
 		// gets (entry);
-		fgets (entry, sizeof(entry)-3, stdin);
+		fgets (entry, sizeof(entry), stdin);
 		entry[strcspn(entry, "\n")] = 0;
 		if (*entry == 'y' || *entry == 'n')
 			break;
@@ -90,7 +90,7 @@ static int prompt_4_group (FILE *fpo, char *ddptr)
 			prompt ();
 
 			// gets (entry);
-			fgets (entry, sizeof(entry)-2, stdin);
+			fgets (entry, sizeof(entry), stdin);
 
 			if (*entry)
 				break;
@@ -116,7 +116,7 @@ static int prompt_4_group (FILE *fpo, char *ddptr)
 	{
 		printf ("Enter the IP address of your DNS server (default - 192.168.1.1)\n> ");
 		// gets (entry);
-		fgets (entry, sizeof(entry)-2, stdin);
+		fgets (entry, sizeof(entry), stdin);
 
 		if (*entry)
 			fprintf (fpo, "domain addserver %s\n", entry);
@@ -137,7 +137,7 @@ static int prompt_4_group (FILE *fpo, char *ddptr)
 
 		printf ("Enter the serial port for the TNC (default - ttyS0)\n> ");
 		// gets (entry);
-		fgets (entry, sizeof(entry)-2, stdin);
+		fgets (entry, sizeof(entry), stdin);
 
 		if (*entry)
 			fprintf (fpo, "attach asy %s - ax25 vhf 4096 256 ", entry);
@@ -149,7 +149,7 @@ static int prompt_4_group (FILE *fpo, char *ddptr)
 
 		printf ("Enter the baud rate for the serial port (default - 9600 baud)\n> ");
 		// gets (entry);
-		fgets (entry, sizeof(entry)-2, stdin);
+		fgets (entry, sizeof(entry), stdin);
 
 		if (*entry)
 			fprintf (fpo, "%s\n", entry);
@@ -174,7 +174,7 @@ static int prompt_4_group (FILE *fpo, char *ddptr)
 
 		printf ("Enter the IP address of the remote host\n> ");
 		// gets (entry);
-		fgets (entry, sizeof(entry)-2, stdin);
+		fgets (entry, sizeof(entry), stdin);
 
 		if (*entry)
 			fprintf (fpo, "attach axip axi0 256 %s\n", entry);
@@ -192,7 +192,7 @@ static int prompt_4_group (FILE *fpo, char *ddptr)
 
 		printf ("Enter the IP address of the remote host\n> ");
 		// gets (entry);
-		fgets (entry, sizeof(entry)-2, stdin);
+		fgets (entry, sizeof(entry), stdin);
 
 		if (*entry)
 			fprintf (fpo, "attach axudp axu0 256 %s\n", entry);
@@ -258,14 +258,14 @@ int main (int argc, char **argv)
 	printf ("Enter the word 'install' to begin, or anything else to quit.\n");
 	prompt ();
 	// gets (buffer_ca);
-	fgets (buffer_ca, sizeof(buffer_ca)-2, stdin);
+	fgets (buffer_ca, sizeof(buffer_ca), stdin);
 	if (strcmp ("install\n", buffer_ca))
 		exit (0);
 
 	printf ("\nEnter the JNOS root directory (default is /jnos)\n");
 	prompt ();
 	// gets (buffer_ca);
-	fgets (buffer_ca, sizeof(buffer_ca)-2, stdin);
+	fgets (buffer_ca, sizeof(buffer_ca), stdin);
 	if (*buffer_ca)
 		jnosroot = strdup (buffer_ca);
 	else
@@ -408,7 +408,7 @@ int main (int argc, char **argv)
 	printf ("\nThe next section requires careful reading !\n\nHit the ENTER key to continue\n");
 	prompt ();
 	// gets (buffer_ca);
-	fgets (buffer_ca, sizeof(buffer_ca)-2, stdin);
+	fgets (buffer_ca, sizeof(buffer_ca), stdin);
 
 	printf ("\nFor System V style linux distros, if you want JNOS to automatically come up at\nboot time or any time it crashes, edit your '/etc/inittab' file and add a line\nsimilar to the following, after the section starting the console login getties\n\n");
 
